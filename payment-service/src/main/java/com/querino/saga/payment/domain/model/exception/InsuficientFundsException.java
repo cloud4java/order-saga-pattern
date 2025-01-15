@@ -1,4 +1,4 @@
-package com.querino.saga.payment.service;
+package com.querino.saga.payment.domain.model.exception;
 
 public class InsuficientFundsException extends RuntimeException {
     public InsuficientFundsException(String insufficientFunds) {

@@ -1,7 +1,6 @@
 package com.querino.saga.order.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.querino.saga.order.domain.OrderEvent;
 import com.querino.saga.order.domain.exception.KafkaPublishException;
 import org.slf4j.Logger;
@@ -13,14 +12,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OrderEventProducer {
-    @Value("${kafka.topic.order}")
+    @Value("${kafka.topic.order-topic}")
     private String orderTopic;
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final Logger logger = LoggerFactory.getLogger(OrderEventProducer.class);
     private final ObjectMapper objectMapper;
+
     @Autowired
     public OrderEventProducer(KafkaTemplate<String, String> kafkaTemplate,
-    ObjectMapper objectMapper) {
+                              ObjectMapper objectMapper) {
         this.kafkaTemplate = kafkaTemplate;
         this.objectMapper = objectMapper;
     }
@@ -36,7 +36,7 @@ public class OrderEventProducer {
                     });
         } catch (Exception e) {
             logger.error("Error while sending order to Kafka: {}", e.getMessage());
-            throw new RuntimeException(new KafkaPublishException("Failed to publish order to Kafka", e));
+            throw new KafkaPublishException("Failed to publish order to Kafka", e);
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.querino.saga.inventory.controller;
 
-import com.querino.saga.inventory.domain.model.InventoryItemDTO;
+import com.querino.saga.inventory.domain.model.ProductDTO;
 import com.querino.saga.inventory.service.InventoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,20 +22,14 @@ public class InventoryController {
     }
 
     @PostMapping
-    public ResponseEntity<InventoryItemDTO> addItem(@Valid @RequestBody InventoryItemDTO inventoryItemDTO) {
-        InventoryItemDTO createdOrder = inventoryService.createItem(inventoryItemDTO);
+    public ResponseEntity<ProductDTO> addItem(@Valid @RequestBody ProductDTO productDTO) {
+        ProductDTO createdOrder = inventoryService.createItem(productDTO);
         return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<InventoryItemDTO>> getAllOrders() {
-        List<InventoryItemDTO> orders = inventoryService.getAllItems();
+    public ResponseEntity<List<ProductDTO>> getAllItems() {
+        List<ProductDTO> orders = inventoryService.getAllItems();
         return ResponseEntity.ok(orders);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<InventoryItemDTO> getOrderById(@PathVariable Long id) {
-        InventoryItemDTO order = inventoryService.getItemById(id);
-        return ResponseEntity.ok(order);
     }
 }

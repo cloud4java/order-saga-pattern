@@ -17,4 +17,5 @@ public class OrderDTO {
     private OrderStatus orderStatus;
     private BigDecimal totalAmount;
     private List<OrderItemDTO> orderItemDTO;
+    private String transactionId;
 }

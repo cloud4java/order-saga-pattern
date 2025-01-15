@@ -1,14 +1,14 @@
 package com.querino.saga.payment.domain.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class PaymentEvent {
-    private Long id;
-    private Long orderId;
-    private String customerName;
+    private Long customerId;
     private PaymentStatus paymentStatus;
-    private BigDecimal totalAmount;
+    private PaymentDTO paymentDTO;
 }

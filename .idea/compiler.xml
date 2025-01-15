@@ -9,11 +9,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="payment-service" />
         <module name="order-service" />
-      </profile>
-      <profile name="Annotation profile for inventoryItem-service" enabled="true">
-        <sourceOutputDir name="../order-service/target/generated-sources/annotations" />
-        <sourceTestOutputDir name="../order-service/target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
         <module name="inventory-service" />
       </profile>
     </annotationProcessing>

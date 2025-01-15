@@ -10,18 +10,15 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
-      group-id: group_id
-      auto-offset-reset: earliest
+      group-id: order_saga_group
+      auto-offset-reset: latest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer:  org.apache.kafka.common.serialization.StringDeserializer
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-
 kafka:
   topic:
-    inventory: inventory-response
-    payment: payment-response
-    order: order
+    order: order-topic
 server:
   port: 8081

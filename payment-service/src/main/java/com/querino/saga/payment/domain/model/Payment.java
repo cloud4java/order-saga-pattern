@@ -18,17 +18,17 @@ public class Payment {
     private Long id;
     private PaymentStatus paymentStatus;
     private BigDecimal amount;
-    private Long orderId;
+    private Long customerId;
 
     public PaymentDTO toDTO() {
-        return new PaymentDTO(id, paymentStatus, amount, orderId);
+        return new PaymentDTO(id, paymentStatus, amount, customerId);
     }
 
     public Payment fromDTO(PaymentDTO paymentDTO) {
         this.id = paymentDTO.getId();
         this.paymentStatus = paymentDTO.getPaymentStatus();
         this.amount = paymentDTO.getAmount();
-        this.orderId = paymentDTO.getOrderId();
+        this.customerId = paymentDTO.getCustomerId();
         return this;
     }
 }

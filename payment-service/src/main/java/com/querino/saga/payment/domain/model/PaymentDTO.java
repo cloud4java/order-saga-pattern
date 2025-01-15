@@ -13,5 +13,5 @@ public class PaymentDTO {
     private Long id;
     private PaymentStatus paymentStatus;
     private BigDecimal amount;
-    private Long orderId;
+    private Long customerId;
 }

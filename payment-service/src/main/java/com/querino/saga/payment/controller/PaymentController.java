@@ -27,9 +27,9 @@ public class PaymentController {
         return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
     }
 
-    @PostMapping("/debit")
-    public ResponseEntity<PaymentDTO> debit(@Valid @RequestBody PaymentDTO paymentDTO) {
-        PaymentDTO createdOrder = paymentService.debit(paymentDTO);
-        return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
+    @GetMapping
+    public ResponseEntity<List<PaymentDTO>> getAllPayments() {
+        List<PaymentDTO> payments = paymentService.getAllPayments();
+        return new ResponseEntity<>(payments, HttpStatus.OK);
     }
 }

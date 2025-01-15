@@ -1,9 +1,9 @@
 package com.querino.saga.payment.kafka;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.querino.saga.payment.domain.PaymentEvent;
-import com.querino.saga.payment.domain.exception.KafkaPublishException;
+import com.querino.saga.payment.domain.model.PaymentEvent;
+import com.querino.saga.payment.domain.model.exception.KafkaPublishException;
+import com.querino.saga.payment.domain.model.inventory.InventoryEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 public class PaymentEventProducer {
 
     private static final String TOPIC_NAME = "order-topic";
+    private static final String PAYMENT_ERROR = "payment-error";
+
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final Logger logger = LoggerFactory.getLogger(PaymentEventProducer.class);
     private final ObjectMapper objectMapper;
@@ -24,18 +26,18 @@ public class PaymentEventProducer {
         this.objectMapper = objectMapper;
     }
 
-    public void sendOrder(PaymentEvent paymentEvent) {
+    public void sendError(InventoryEvent inventoryEvent) {
         try {
             kafkaTemplate
-                    .send(TOPIC_NAME, String.valueOf(paymentEvent.getOrderId()), objectMapper.writeValueAsString(paymentEvent))
-                    .thenAccept(item -> logger.info("Order sent {} successfully to topic: {}", item, TOPIC_NAME))
+                    .send(PAYMENT_ERROR, inventoryEvent.toString(), objectMapper.writeValueAsString(inventoryEvent))
+                    .thenAccept(result -> logger.info("Inventory sent {} successfully to topic: {}", result, "inventory-topic"))
                     .exceptionally(ex ->
                     {
                         throw new RuntimeException(ex);
                     });
         } catch (Exception e) {
-            logger.error("Error while sending order to Kafka: {}", e.getMessage());
-            throw new RuntimeException(new KafkaPublishException("Failed to publish order to Kafka", e));
+            logger.error("Error while error event to Kafka: {}", e.getMessage());
+            throw new KafkaPublishException("Failed to publish payment event to Kafka", e);
         }
     }
 }

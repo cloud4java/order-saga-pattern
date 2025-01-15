@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class InventoryEventProducer {
     
-    private static final String TOPIC_NAME = "payment-topic";
+    private static final String TOPIC_NAME = "inventory-topic";
+    private static final String INVENTORY_ERROR = "inventory-error";
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final Logger logger = LoggerFactory.getLogger(InventoryEventProducer.class);
     private final ObjectMapper objectMapper;
@@ -27,14 +28,29 @@ public class InventoryEventProducer {
     public void send(InventoryEvent inventoryEvent) {
         try {
             kafkaTemplate
-                    .send(TOPIC_NAME, String.valueOf(inventoryEvent.getCustomerId()), objectMapper.writeValueAsString(inventoryEvent))
-                    .thenAccept(item -> logger.info("Order sent {} successfully to topic: {}", item, TOPIC_NAME))
+                    .send(TOPIC_NAME, inventoryEvent.toString(), objectMapper.writeValueAsString(inventoryEvent))
+                    .thenAccept(item -> logger.info("Inventory event sent {} successfully to topic: {}", item, TOPIC_NAME))
                     .exceptionally(ex ->
                     {
                         throw new RuntimeException(ex);
                     });
         } catch (Exception e) {
             logger.error("Error while sending order to Kafka: {}", e.getMessage());
+            throw new KafkaPublishException("Failed to publish order to Kafka", e);
+        }
+    }
+
+    public void sendError(InventoryEvent inventoryEvent) {
+        try {
+            kafkaTemplate
+                    .send(INVENTORY_ERROR, inventoryEvent.toString(), inventoryEvent.getTransactionId())
+                    .thenAccept(item -> logger.info("Inventory error event {} sent successfully to topic: {}", item, TOPIC_NAME))
+                    .exceptionally(ex ->
+                    {
+                        throw new RuntimeException(ex);
+                    });
+        } catch (Exception e) {
+            logger.error("Error while sending event to Kafka: {}", e.getMessage());
             throw new KafkaPublishException("Failed to publish order to Kafka", e);
         }
     }

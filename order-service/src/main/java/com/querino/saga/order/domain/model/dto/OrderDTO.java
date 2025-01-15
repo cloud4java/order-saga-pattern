@@ -15,6 +15,6 @@ public class OrderDTO {
     private Long id;
     private Long customerId;
     private OrderStatus orderStatus;
-    private BigDecimal totalAmount;
     private List<OrderItemDTO> orderItemDTO;
+    private String transactionId;
 }
