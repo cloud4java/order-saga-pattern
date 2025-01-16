@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class PaymentEventConsumer {
-    private static final String INVENTORY_TOPIC = "inventory-topic";
+
     private final PaymentService paymentService;
     private final ObjectMapper objectMapper;
 
@@ -20,7 +20,7 @@ public class PaymentEventConsumer {
         this.objectMapper = objectMapper;
     }
 
-    @KafkaListener(topics = INVENTORY_TOPIC)
+    @KafkaListener(topics = "${kafka.inventory.topic}")
     public void process(String message) {
         try {
             InventoryEvent inventoryEvent = objectMapper.readValue(message, InventoryEvent.class);

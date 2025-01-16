@@ -21,3 +21,11 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+kafka:
+  inventory:
+    topic: inventory_topic
+  payment:
+    success-topic: payment_success_topic
+    topic: payment_topic
+  topic:
+    payment-error: payment-error

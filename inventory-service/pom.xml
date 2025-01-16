@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.querino.saga</groupId>
-	<artifactId>product-service</artifactId>
+	<artifactId>inventory-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>product-service</name>
+	<name>inventory-service</name>
 	<description>Spring Boot Inventory Service</description>
 
 	<dependencies>

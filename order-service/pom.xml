@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.querino.saga</groupId>
-    <artifactId>inventoryItem-service</artifactId>
+    <artifactId>order-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>inventoryItem-service</name>
+    <name>order-service</name>
     <description>Demo project for Spring Boot</description>
     <dependencies>
         <dependency>

@@ -13,6 +13,6 @@ public class OpenApiConfig {
     public OpenAPI openAPI() {
         return new OpenAPI()
                 .components(new Components())
-                .info(new Info().title("Order API").version("1.0"));
+                .info(new Info().title("Payment API").version("1.0"));
     }
 }

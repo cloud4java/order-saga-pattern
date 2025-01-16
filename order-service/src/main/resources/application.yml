@@ -19,6 +19,10 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 kafka:
   topic:
-    order: order-topic
+    inventory-error: inventory-error
+    order: order
 server:
   port: 8081
+order-service:
+  topic:
+    order: order

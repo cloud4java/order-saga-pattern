@@ -8,14 +8,13 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class OrderEventConsumer {
-    private static final String INVENTORY_ERROR = "inventory-error";
     private final OrderService orderService;
 
     public OrderEventConsumer(OrderService orderService) {
         this.orderService = orderService;
     }
 
-    @KafkaListener(topics = INVENTORY_ERROR)
+    @KafkaListener(topics = "${kafka.topic.inventory-error}")
     public void handlePaymentEvent(String transactionErroId) {
         try {
             orderService.handleTransactionError(transactionErroId);

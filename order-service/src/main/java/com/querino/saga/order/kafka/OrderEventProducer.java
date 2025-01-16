@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OrderEventProducer {
-    @Value("${kafka.topic.order-topic}")
+    @Value("${kafka.topic.order}")
     private String orderTopic;
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final Logger logger = LoggerFactory.getLogger(OrderEventProducer.class);

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class InventoryEventConsumer {
-    private static final String PAYMENT_ERROR = "payment-error";
     private final InventoryService inventoryService;
     private final ObjectMapper objectMapper;
 
@@ -21,7 +20,7 @@ public class InventoryEventConsumer {
         this.objectMapper = objectMapper;
     }
 
-    @KafkaListener(topics = "order")
+    @KafkaListener(topics = "${kafka.order.topic}")
     public void handleInventoryEvent(String message) {
         log.info("Processing message from topic 'order', message: {}", message);
         try {
@@ -34,9 +33,9 @@ public class InventoryEventConsumer {
         }
     }
 
-    @KafkaListener(topics = PAYMENT_ERROR)
+    @KafkaListener(topics = "${kafka.payment.error}")
     public void handlePaymentEvent(String message) {
-        log.info("Processing message from topic '{}', message: {}", PAYMENT_ERROR, message);
+        log.info("Processing payment error message: {}", message);
         try {
             InventoryEvent inventoryEvent = objectMapper.readValue(message, InventoryEvent.class);
             inventoryService.handleTransactionError(inventoryEvent);

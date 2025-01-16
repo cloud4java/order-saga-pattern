@@ -6,13 +6,15 @@ import com.querino.saga.inventory.domain.exception.KafkaPublishException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class InventoryEventProducer {
-    
-    private static final String TOPIC_NAME = "inventory-topic";
+
+    @Value("${kafka.topic.inventory}")
+    private String inventoryTopic;
     private static final String INVENTORY_ERROR = "inventory-error";
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final Logger logger = LoggerFactory.getLogger(InventoryEventProducer.class);
@@ -28,8 +30,8 @@ public class InventoryEventProducer {
     public void send(InventoryEvent inventoryEvent) {
         try {
             kafkaTemplate
-                    .send(TOPIC_NAME, inventoryEvent.toString(), objectMapper.writeValueAsString(inventoryEvent))
-                    .thenAccept(item -> logger.info("Inventory event sent {} successfully to topic: {}", item, TOPIC_NAME))
+                    .send(inventoryTopic, inventoryEvent.toString(), objectMapper.writeValueAsString(inventoryEvent))
+                    .thenAccept(item -> logger.info("Inventory event sent {} successfully to topic: {}", item, inventoryTopic))
                     .exceptionally(ex ->
                     {
                         throw new RuntimeException(ex);
@@ -44,7 +46,7 @@ public class InventoryEventProducer {
         try {
             kafkaTemplate
                     .send(INVENTORY_ERROR, inventoryEvent.toString(), inventoryEvent.getTransactionId())
-                    .thenAccept(item -> logger.info("Inventory error event {} sent successfully to topic: {}", item, TOPIC_NAME))
+                    .thenAccept(item -> logger.info("Inventory error event {} sent successfully to topic: {}", item, inventoryTopic))
                     .exceptionally(ex ->
                     {
                         throw new RuntimeException(ex);

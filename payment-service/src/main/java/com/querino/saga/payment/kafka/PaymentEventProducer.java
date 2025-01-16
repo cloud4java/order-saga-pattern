@@ -1,21 +1,20 @@
 package com.querino.saga.payment.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.querino.saga.payment.domain.model.PaymentEvent;
 import com.querino.saga.payment.domain.model.exception.KafkaPublishException;
 import com.querino.saga.payment.domain.model.inventory.InventoryEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PaymentEventProducer {
 
-    private static final String TOPIC_NAME = "order-topic";
-    private static final String PAYMENT_ERROR = "payment-error";
-
+    @Value("${kafka.topic.payment-error}")
+    private String paymentErrorTopic;
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final Logger logger = LoggerFactory.getLogger(PaymentEventProducer.class);
     private final ObjectMapper objectMapper;
@@ -29,7 +28,7 @@ public class PaymentEventProducer {
     public void sendError(InventoryEvent inventoryEvent) {
         try {
             kafkaTemplate
-                    .send(PAYMENT_ERROR, inventoryEvent.toString(), objectMapper.writeValueAsString(inventoryEvent))
+                    .send(paymentErrorTopic, inventoryEvent.toString(), objectMapper.writeValueAsString(inventoryEvent))
                     .thenAccept(result -> logger.info("Inventory sent {} successfully to topic: {}", result, "inventory-topic"))
                     .exceptionally(ex ->
                     {
